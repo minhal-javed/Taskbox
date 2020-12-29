@@ -1,15 +1,30 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
+import { TaskInterface } from '../interface/Task.interface';
+import { pinTask,unPinTask,archive } from '../lib/redux';
 
-import TaskList from './TaskList';
+import {TaskList} from './TaskList';
 
 
-interface PureInboxProps{
-    error:string | null
+export interface PureInboxProps{
+    error?:string | null
 }
 
 export const PureInboxScreen:React.FC<PureInboxProps>=({ error }) =>{
+const task=useSelector((state)=>state);
+const dispatch =useDispatch()
+
+const onPinTask=(id:string)=>{
+  dispatch(pinTask({id:id}))
+}
+const onArchiveTask=(id:string)=>{
+  dispatch(archive({id:id}))
+}
+const onUnPinTask=(id:string)=>{
+  dispatch(unPinTask({id:id}))
+}
   if (error) {
     return (
       <div className="page lists-show">
@@ -23,15 +38,16 @@ export const PureInboxScreen:React.FC<PureInboxProps>=({ error }) =>{
   }
 
   return (
-    <div className="page lists-show">
+    <div >
       <nav>
-        <h1 className="title-page">
-          <span className="title-wrapper">Taskbox</span>
+        <h1 className='max-w-full text-6xl p-8 '>
+          Taskbox App
         </h1>
+      <TaskList tasks={task as TaskInterface[]} onPinTask={onPinTask}  onArchiveTask={onArchiveTask}  onUnPinTask={onUnPinTask}/>
+
       </nav>
-      <TaskList />
     </div>
   );
 }
 
-export default connect(({ error }:PureInboxProps) => ({ error }))(PureInboxScreen);
+// export default connect(({ error }:PureInboxProps) => ({ error }))(PureInboxScreen);

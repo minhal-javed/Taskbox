@@ -2,14 +2,16 @@ import React from 'react';
 
 import {TaskList,Taskprops} from './TaskList';
 import * as TaskStories from './Task.stories';
+import { Story } from '@storybook/react/types-6-0';
+import { Meta } from "@storybook/react/types-6-0";
 
 export default {
   component: TaskList,
   title: 'TaskList',
-  decorators: [(story:any) => <div style={{ padding: '3rem' }}>{story()}</div>],
-};
+  decorators: [(story:() => React.ReactNode) => <div style={{ padding: '3rem' }}>{story()}</div>],
+} as Meta;
 
-const Template = (args:Taskprops) => <TaskList {...args} />;
+const Template:Story<Taskprops> = args => <TaskList {...args} />;
 
 export const Default:any = Template.bind({});
 Default.args = {

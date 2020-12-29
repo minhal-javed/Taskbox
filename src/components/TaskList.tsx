@@ -1,8 +1,7 @@
 import React from 'react';
 import {TaskInterface} from '../interface/Task.interface'
 import {Task} from './Task';
-import {connect} from 'react-redux';
-import {archiveTask,pinTask} from  '../lib/redux'
+
 
 export interface Taskprops{
     loading?:boolean
@@ -12,10 +11,11 @@ export interface Taskprops{
     onUnPinTask?:(id:string)=>void
 }   
 
-export const TaskList:React.FC<Taskprops>=({ loading, tasks, onPinTask, onArchiveTask })=> {
+export const TaskList:React.FC<Taskprops>=({ loading, tasks, onPinTask, onArchiveTask,onUnPinTask })=> {
   const events = {
     onPinTask,
     onArchiveTask,
+    onUnPinTask
   };
 
   const LoadingRow = (
@@ -30,11 +30,7 @@ export const TaskList:React.FC<Taskprops>=({ loading, tasks, onPinTask, onArchiv
     return (
       <div className="list-items">
         {LoadingRow}
-        {LoadingRow}
-        {LoadingRow}
-        {LoadingRow}
-        {LoadingRow}
-        {LoadingRow}
+        
       </div>
     );
   }
@@ -54,7 +50,7 @@ export const TaskList:React.FC<Taskprops>=({ loading, tasks, onPinTask, onArchiv
     ...tasks.filter(t => t.state !== 'TASK_PINNED'),
   ];
   return (
-    <div className="list-items">
+    <div className='max-w-xl mx-auto my-6 bg-gray-500 p-3 rounded-md'>
       {tasksInOrder.map(task => (
         <Task key={task.id} task={task} {...events} />
       ))}
@@ -62,13 +58,13 @@ export const TaskList:React.FC<Taskprops>=({ loading, tasks, onPinTask, onArchiv
   );
 }
 
-export default connect(
-({tasks}:any)=>({
-  tasks:tasks.filter((t:any)=>t.state==='TASK_INBOX' || t.state === 'TASK_PINNED')
-}),
-dispatch=>({
-  onArchiveTask:(id:any)=>dispatch(archiveTask(id)),
-  onPinTask:(id:any)=>dispatch(pinTask(id))
+// export default connect(
+// ({tasks}:any)=>({
+//   tasks:tasks.filter((t:any)=>t.state==='TASK_INBOX' || t.state === 'TASK_PINNED')
+// }),
+// dispatch=>({
+//   onArchiveTask:(id:any)=>dispatch(archiveTask(id)),
+//   onPinTask:(id:any)=>dispatch(pinTask(id))
 
-})
-)(TaskList);
+// })
+// )(TaskList);
